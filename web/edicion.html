@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./css/edicion.css">
+</head>
+
+<body>
+    <div id="i341ih" class="row">
+        <div id="i03y6l" class="cell">
+            <form method="post" action="UploadFile.jsp" enctype="multipart/form-data" class="form">
+                <div class="form-group"><label class="label">Revista<br /></label></div><select required=""
+                    name="revista" class="select">
+                    <option value="">- Select option -</option>
+                    <option value="1">Option 1</option>
+                </select>
+                <div class="form-group"><label class="label">Nombre<br /></label></div><input type="text"
+                    name="nombreEdicion" class="input" /><label class="label">Archivo<br /></label><input name="file"
+                    type="file" accept="application/pdf" class="input" /><label class="label">Fecha de
+                    Creación</label><input name="fechaCreacion" type="date" class="input" /><label
+                    class="label">Comentable</label><input type="checkbox" name="comentable" class="checkbox" /><label
+                    class="label">Likeable<br /></label><input type="checkbox" name="likeable" class="checkbox" />
+                <div class="form-group"><button type="submit" class="button">Send</button></div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
