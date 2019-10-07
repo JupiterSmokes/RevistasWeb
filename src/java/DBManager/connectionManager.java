@@ -58,6 +58,9 @@ public class connectionManager {
     }
     public static boolean checkStatement(String statementString){
         try {
+            if (connection.isClosed()) {
+                connect();
+            }
             return statement.execute(statementString);
         } catch (SQLException ex) {
             Logger.getLogger(connectionManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -89,6 +92,7 @@ public class connectionManager {
     }
     
     public static ResultSet select(Insertable obj, String[] fields, String[] conditions){
+        connect();
         result = null;
         String sql = "SELECT %s FROM %s";
         if  (conditions != null){ 

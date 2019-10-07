@@ -26,8 +26,8 @@ public class Edicion implements Insertable, Serializable{
     private String nombreEdicion;
     private String path;
     private Date fechaCreacion;
-    private boolean comentable;
-    private boolean likeable;
+    private int comentable;
+    private int likeable;
 
     public Edicion() {
         try {
@@ -42,11 +42,19 @@ public class Edicion implements Insertable, Serializable{
     public Edicion(HttpServletRequest req) {
  //       System.out.println(req.getParameter("nombreEdicion"));
         this.revista = Integer.parseInt(req.getParameter("revista"));
+        try {
+            ResultSet n = connectionManager.query("SELECT IFNULL(MAX(NUMERO),0) FROM Edicion");
+            n.first();
+            this.numero = n.getInt(1)+1;
+        } catch (SQLException ex) {
+            Logger.getLogger(Edicion.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            connectionManager.close();
+        }
         this.nombreEdicion = req.getParameter("nombreEdicion");
-        this.path = req.getParameter("path");
-        this.fechaCreacion = Date.valueOf(req.getParameter("fecahCreacion"));
-        this.comentable = Boolean.valueOf(req.getParameter("comentable"));
-        this.likeable = Boolean.valueOf(req.getParameter("likeable"));
+        this.fechaCreacion = Date.valueOf(req.getParameter("fechaCreacion"));
+        this.setComentable(req.getParameter("comentable"));
+        this.setLikeable(req.getParameter("likeable"));
     
     }
 
@@ -80,7 +88,7 @@ public class Edicion implements Insertable, Serializable{
         return path;
     }
     public void setPath(String path) {
-        this.path = path;
+        this.path = path.replace("\\","\\\\");
     }
 
     public Date getFechaCreacion() {
@@ -89,35 +97,47 @@ public class Edicion implements Insertable, Serializable{
     public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
+    public void setFechaCreacion(String fecha) {
+        this.fechaCreacion = Date.valueOf(fecha);
+    }
 
-    public boolean isComentable() {
+    public int isComentable() {
         return comentable;
     }
-    public void setComentable(boolean comentable) {
+    public void setComentable(int comentable) {
         this.comentable = comentable;
     }
     public void setComentable(String comentable) {
-        this.comentable = comentable.equals("on");
+        if(!(comentable == null) && comentable.equals("on")) {
+            this.comentable = 1;
+        } else {
+            this.comentable = 0;
+        }
     }
 
-    public boolean isLikeable() {
+    public int isLikeable() {
         return likeable;
     }
-    public void setLikeable(boolean likeable) {
+    public void setLikeable(int likeable) {
         this.likeable = likeable;
     }
     public void setLikeable(String likeable) {
-        this.likeable = likeable.equals("on");
+        if(!(likeable == null) && likeable.equals("on")){ 
+            this.likeable = 1;
+        } else {
+            this.likeable = 0;
+        }
     }
 
     @Override
     public String insert() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+           return String.format("%d,%d,'%s','%s','%s',%d,%d",
+                this.revista, this.numero,this.nombreEdicion, this.path, this.fechaCreacion,this.comentable, this.likeable);
     }
 
     @Override
     public String columns() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "";
     }
 
     @Override
@@ -137,7 +157,7 @@ public class Edicion implements Insertable, Serializable{
 
     @Override
     public String table() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.getClass().getSimpleName();
     }
 
     @Override

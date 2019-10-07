@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author DANIEL
  */
-@WebServlet("/ControladorRevista")
+@WebServlet("/e/ControladorRevista")
 public class ControladorRevista extends HttpServlet{
 
     @Override
@@ -28,7 +28,7 @@ public class ControladorRevista extends HttpServlet{
         connectionManager.insert(r);
         
         resp.setContentType("text/html");
-        String nueva = "edicion.html";
+        String nueva = "../Revistas/e/edicion.html";
         resp.setStatus(resp.SC_MOVED_TEMPORARILY);
         resp.setHeader("Location", nueva);
     }

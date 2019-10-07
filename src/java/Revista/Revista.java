@@ -34,6 +34,20 @@ public class Revista implements Insertable, Serializable{
 
     public Revista() {
     }
+
+    public Revista(int id, String nombre, String editor, String categoria, String descripcion, double suscripcionMes, double costoDiario) {
+        this.id = id;
+        this.nombre = nombre;
+        this.editor = editor;
+        this.categoria = categoria;
+        this.descripcion = descripcion;
+        this.suscripcionMes = suscripcionMes;
+        this.costoDiario = costoDiario;
+    }
+
+    public Revista(String nombre) {
+        this.nombre = nombre;
+    }
     
     
 
@@ -93,12 +107,49 @@ public class Revista implements Insertable, Serializable{
 
     @Override
     public String select(String[] fields) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    String select = "";
+        for (String field : fields) {
+            switch (field.toLowerCase()){
+                case "id": select += ", Id"; break;
+                case "nombre": select += ", Nombre"; break;
+                case "editor": select += ", Editor"; break;
+                case "categoria": select += ", Categoria"; break;
+                case "descripcion": select += ", Descripcion"; break;
+                case "suscripcion": select += ", SuscripcionMes"; break;
+                case "costo": select += ", Costo"; break;
+                default: select = "*"; break;
+            }
+        }
+        if (select.charAt(0) == ',') select = select.replaceFirst(",", "");
+    return select;
     }
-
+    public String select(String fields){
+        return select(fields.split(","));
+    }
+    
     @Override
     public String where(String[] fields) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    String condition = "";
+        for (String field : fields) {
+            switch (field.toLowerCase()){
+                case "id": condition += " AND Id=" + this.id;
+                break;
+                case "nombre": condition += " AND Nombre='" + this.nombre +"'";
+                break;
+                case "editor": condition += " AND Editor='" + this.editor + "'";
+                break;
+                case "categoria": condition += " AND Categoria='" + this.categoria + "'";
+                break;
+                case "descripcion": condition += " AND Descripcion='" + this.descripcion + "'";
+                break;
+                case "suscripcion": condition += " AND SuscripcionMes=" + this.suscripcionMes;
+                break;
+                case "costo": condition += " AND Costo=" + this.costoDiario;
+                break;
+            }
+        }
+        condition=condition.replaceFirst("AND", "");
+    return condition;
     }
 
     @Override

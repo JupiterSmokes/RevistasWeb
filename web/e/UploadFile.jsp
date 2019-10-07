@@ -14,15 +14,17 @@
 <jsp:useBean id="edicion" class="Revista.Edicion"/>
 
 <%
+    
+         out.println(request.getParameter("nombreEdicion"));
+         
    File file ;
    int maxFileSize = 50000 * 1024;
    int maxMemSize = 5000 * 1024;
    System.out.println(maxFileSize +","+maxMemSize);
-   ServletContext context = pageContext.getServletContext();
    String filePath = "C:/Users/DANIEL/Documents/Programming/RevistasCorrecto/TestPDF/";
-    //out.println(filePath);
-
-   // Verify the content type
+   String propertyName ="";
+   String value="";
+    // Verify the content type
    String contentType = request.getContentType();
    
    if ((contentType.indexOf("multipart/form-data") >= 0)) {
@@ -74,14 +76,20 @@
                fileName + "<br>");
             } else if(fi.isFormField()){
                 //Set bean property
-                String propertyName = fi.getFieldName();
-                  String value = fi.getString();
-                  out.print(propertyName+" "); out.println(value+"<br>");
-                  
-                %>
-                
-<%          }
+                propertyName = fi.getFieldName();
+                value = fi.getString();
+                out.print(propertyName+" "); out.println(value+"<br>");
+                switch (propertyName){
+                    case "revista": edicion.setRevista(value); break;
+                    case "nombreEdicion": edicion.setNombreEdicion(value); break;
+                    case "revista": edicion.setRevista(value); break;
+                    case "revista": edicion.setRevista(value); break;
+                    case "revista": edicion.setRevista(value); break;
+                    case "revista": edicion.setRevista(value); break;
+                }
+            }
          }
+         out.println(edicion.insert());
          out.println("</body>");
          out.println("</html>");
       } catch(Exception ex) {
